@@ -43,12 +43,12 @@ https://<cloudfront-domain>/<image-path>?<processing-parameters>
 
 ### 标准参数格式
 ```
-https://d2ssb9g9045umf.cloudfront.net/image.jpg?width=300&height=200
+https://<cloudfront-domain>/image.jpg?width=300&height=200
 ```
 
 ### 阿里云OSS参数格式
 ```
-https://d2ssb9g9045umf.cloudfront.net/image.jpg?x-oss-process=image/resize,w_300/quality,q_90
+https://<cloudfront-domain>/image.jpg?x-oss-process=image/resize,w_300/quality,q_90
 ```
 
 ## 支持的阿里云OSS参数格式
@@ -61,6 +61,9 @@ https://d2ssb9g9045umf.cloudfront.net/image.jpg?x-oss-process=image/resize,w_300
 4. 裁剪图片: `x-oss-process=image/crop,w_100,h_100,x_10,y_10`
 5. 旋转图片: `x-oss-process=image/rotate,90`
 6. 格式转换: `x-oss-process=image/format,png`
+7. 获取图片信息: `x-oss-process=image/info`
+8. 文本水印: `x-oss-process=image/watermark,text_SGVsbG8gV29ybGQ=,size_40,color_FF0000,t_50,g_se`
+9. 图片水印: `x-oss-process=image/watermark,image_bG9nby5wbmc=,t_70,g_se`
 
 ## 输出
 
@@ -79,4 +82,4 @@ https://d2ssb9g9045umf.cloudfront.net/image.jpg?x-oss-process=image/resize,w_300
 ## 最终代码和测试结果
 
 - `final-code/`: 包含修复后的Lambda函数代码
-- `final-test-results/`: 包含测试结果和示例图片
+- `TEST-REPORT.md`: 包含完整的测试报告和结果
