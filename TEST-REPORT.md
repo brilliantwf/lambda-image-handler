@@ -4,7 +4,7 @@
 
 - **区域**：美东1区 (us-east-1)
 - **CloudFormation 堆栈名称**：lambda-image-handler
-- **CloudFront 分发 URL**：https://d22hwoqlm1vw1c.cloudfront.net
+- **CloudFront 分发 URL**：[已隐藏，出于安全考虑]
 - **源 S3 存储桶**：new-ue1-img
 - **Lambda 函数**：lambda-image-handler-lambdaimagehandlerLambdaHandl-l0QhL8p3AFPK
 - **运行时**：nodejs20.x
@@ -17,46 +17,46 @@
 
 ### 1. 基本图像处理功能
 
-| 功能 | 测试参数 | 结果 | URL |
-|------|---------|------|-----|
-| 图像缩放 | `resize,w_300` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/resize,w_300 |
-| 图像裁剪 | `crop,x_100,y_100,w_200,h_200` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/crop,x_100,y_100,w_200,h_200 |
-| 图像质量调整 | `quality,q_80` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/quality,q_80 |
-| 格式转换 (PNG) | `format,png` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/format,png |
-| 格式转换 (WebP) | `format,webp` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/format,webp |
-| 图像旋转 | `rotate,90` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/rotate,90 |
-| 图像模糊 | `blur,r_3,s_2` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/blur,r_3,s_2 |
-| 圆形裁剪 | `circle,r_300` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/circle,r_300 |
-| 圆角矩形 | `rounded-corners,r_20` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/rounded-corners,r_20 |
-| 亮度调整 | `bright,50` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/bright,50 |
-| 对比度调整 | `contrast,50` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/contrast,50 |
-| 锐化处理 | `sharpen,100` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/sharpen,100 |
+| 功能 | 测试参数 | 结果 |
+|------|---------|------|
+| 图像缩放 | `resize,w_300` | ✅ 成功 |
+| 图像裁剪 | `crop,x_100,y_100,w_200,h_200` | ✅ 成功 |
+| 图像质量调整 | `quality,q_80` | ✅ 成功 |
+| 格式转换 (PNG) | `format,png` | ✅ 成功 |
+| 格式转换 (WebP) | `format,webp` | ✅ 成功 |
+| 图像旋转 | `rotate,90` | ✅ 成功 |
+| 图像模糊 | `blur,r_3,s_2` | ✅ 成功 |
+| 圆形裁剪 | `circle,r_300` | ✅ 成功 |
+| 圆角矩形 | `rounded-corners,r_20` | ✅ 成功 |
+| 亮度调整 | `bright,50` | ✅ 成功 |
+| 对比度调整 | `contrast,50` | ✅ 成功 |
+| 锐化处理 | `sharpen,100` | ✅ 成功 |
 
 ### 2. SVG 文本水印功能
 
-| 功能 | 测试参数 | 结果 | URL |
-|------|---------|------|-----|
-| 基本文本水印 | `watermark,text_SGVsbG8gV29ybGQ=,size_40,color_FF0000,t_50,g_se` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,text_SGVsbG8gV29ybGQ=,size_40,color_FF0000,t_50,g_se |
-| 带阴影的文本水印 | `watermark,text_Q29weXJpZ2h0IMKpIDIwMjU=,size_30,color_FFFFFF,shadow_50,g_south` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,text_Q29weXJpZ2h0IMKpIDIwMjU=,size_30,color_FFFFFF,shadow_50,g_south |
-| 旋转的文本水印 | `watermark,text_RFJBRlQ=,size_60,color_FF0000,t_30,rotate_45,g_center` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,text_RFJBRlQ=,size_60,color_FF0000,t_30,rotate_45,g_center |
-| 多行文本水印 | `watermark,text_TXVsdGlwbGUKTGluZQpUZXh0IFdhdGVybWFyaw==,size_30,color_FFFFFF,shadow_50,g_sw` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,text_TXVsdGlwbGUKTGluZQpUZXh0IFdhdGVybWFyaw==,size_30,color_FFFFFF,shadow_50,g_sw |
+| 功能 | 测试参数 | 结果 |
+|------|---------|------|
+| 基本文本水印 | `watermark,text_SGVsbG8gV29ybGQ=,size_40,color_FF0000,t_50,g_se` | ✅ 成功 |
+| 带阴影的文本水印 | `watermark,text_Q29weXJpZ2h0IMKpIDIwMjU=,size_30,color_FFFFFF,shadow_50,g_south` | ✅ 成功 |
+| 旋转的文本水印 | `watermark,text_RFJBRlQ=,size_60,color_FF0000,t_30,rotate_45,g_center` | ✅ 成功 |
+| 多行文本水印 | `watermark,text_TXVsdGlwbGUKTGluZQpUZXh0IFdhdGVybWFyaw==,size_30,color_FFFFFF,shadow_50,g_sw` | ✅ 成功 |
 
 ### 3. 图片水印功能
 
-| 功能 | 测试参数 | 结果 | URL |
-|------|---------|------|-----|
-| 基本图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_se` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,image_bG9nby5wbmc=,t_70,g_se |
-| 居中图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_center` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,image_bG9nby5wbmc=,t_70,g_center |
-| 左上角图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_nw` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,image_bG9nby5wbmc=,t_70,g_nw |
-| 平铺图片水印 | `watermark,image_bG9nby5wbmc=,t_30,fill_1` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,image_bG9nby5wbmc=,t_30,fill_1 |
-| 混合水印 | `watermark,text_VGVzdCBUZXh0,image_bG9nby5wbmc=,t_70,g_se` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/watermark,text_VGVzdCBUZXh0,image_bG9nby5wbmc=,t_70,g_se |
+| 功能 | 测试参数 | 结果 |
+|------|---------|------|
+| 基本图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_se` | ✅ 成功 |
+| 居中图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_center` | ✅ 成功 |
+| 左上角图片水印 | `watermark,image_bG9nby5wbmc=,t_70,g_nw` | ✅ 成功 |
+| 平铺图片水印 | `watermark,image_bG9nby5wbmc=,t_30,fill_1` | ✅ 成功 |
+| 混合水印 | `watermark,text_VGVzdCBUZXh0,image_bG9nby5wbmc=,t_70,g_se` | ✅ 成功 |
 
 ### 4. 图片信息获取功能
 
-| 功能 | 测试参数 | 结果 | URL |
-|------|---------|------|-----|
-| 获取JPG图片信息 | `info` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/info |
-| 获取PNG图片信息 | `info` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/real-image.png?x-oss-process=image/info |
+| 功能 | 测试参数 | 结果 |
+|------|---------|------|
+| 获取JPG图片信息 | `info` | ✅ 成功 |
+| 获取PNG图片信息 | `info` | ✅ 成功 |
 
 **测试结果示例**：
 ```json
@@ -79,9 +79,9 @@
 
 ### 5. 组合处理功能
 
-| 功能 | 测试参数 | 结果 | URL |
-|------|---------|------|-----|
-| 缩放并添加水印 | `resize,w_300/watermark,text_SGVsbG8gV29ybGQ=,size_30,color_FF0000` | ✅ 成功 | https://d22hwoqlm1vw1c.cloudfront.net/landscape.jpg?x-oss-process=image/resize,w_300/watermark,text_SGVsbG8gV29ybGQ=,size_30,color_FF0000 |
+| 功能 | 测试参数 | 结果 |
+|------|---------|------|
+| 缩放并添加水印 | `resize,w_300/watermark,text_SGVsbG8gV29ybGQ=,size_30,color_FF0000` | ✅ 成功 |
 
 ## 功能分析
 
