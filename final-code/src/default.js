@@ -1,0 +1,155 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseRequest = exports.kvstore = exports.bufferStore = exports.getProcessor = void 0;
+const path = require("path");
+const config_1 = require("./config");
+const processor_1 = require("./processor");
+const image_1 = require("./processor/image");
+const style_1 = require("./processor/style");
+const video_1 = require("./processor/video");
+const store_1 = require("./store");
+const style = require("./style.json");
+const PROCESSOR_MAP = {
+    [image_1.ImageProcessor.getInstance().name]: image_1.ImageProcessor.getInstance(),
+    [style_1.StyleProcessor.getInstance().name]: style_1.StyleProcessor.getInstance(kvstore()),
+    [video_1.VideoProcessor.getInstance().name]: video_1.VideoProcessor.getInstance(),
+};
+function getProcessor(name) {
+    const processor = PROCESSOR_MAP[name];
+    if (!processor) {
+        throw new processor_1.InvalidArgument('Can Not find processor');
+    }
+    return processor;
+}
+exports.getProcessor = getProcessor;
+function bufferStore(p) {
+    if (config_1.default.isProd) {
+        if (!p) {
+            p = config_1.default.srcBucket;
+        }
+        console.log(`use ${store_1.S3Store.name} s3://${p}`);
+        return new store_1.S3Store(p);
+    }
+    else {
+        if (!p) {
+            p = path.join(__dirname, '../test/fixtures');
+        }
+        console.log(`use ${store_1.LocalStore.name} file://${p}`);
+        return new store_1.LocalStore(p);
+    }
+}
+exports.bufferStore = bufferStore;
+function kvstore() {
+    if (config_1.default.isProd) {
+        console.log(`use ${store_1.DynamoDBStore.name}`);
+        return new store_1.DynamoDBStore(config_1.default.styleTableName);
+    }
+    else {
+        console.log(`use ${store_1.MemKVStore.name}`);
+        return new store_1.MemKVStore(style);
+    }
+}
+exports.kvstore = kvstore;
+function parseRequest(uri, query) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _n, _o, _p, _q;
+    uri = uri.replace(/^\//, ''); // trim leading slash "/"
+    const parts = uri.split(/@?!/, 2);
+    
+    // 检查标准图像处理参数
+    const width = (_a = query['width']) !== null && _a !== void 0 ? _a : null;
+    const height = (_b = query['height']) !== null && _b !== void 0 ? _b : null;
+    const quality = (_c = query['quality']) !== null && _c !== void 0 ? _c : null;
+    const outputFormat = (_d = query['outputFormat']) !== null && _d !== void 0 ? _d : null;
+    const crop = (_e = query['crop']) !== null && _e !== void 0 ? _e : null;
+    const rotate = (_f = query['rotate']) !== null && _f !== void 0 ? _f : null;
+    const blur = (_g = query['blur']) !== null && _g !== void 0 ? _g : null;
+    const sharpen = (_h = query['sharpen']) !== null && _h !== void 0 ? _h : null;
+    const grayscale = (_j = query['grayscale']) !== null && _j !== void 0 ? _j : null;
+    
+    // 检查OSS格式参数
+    const x_oss_process = (_k = query['x-oss-process']) !== null && _k !== void 0 ? _k : '';
+    
+    // 如果有标准参数，将它们转换为actions
+    if (width || height || quality || outputFormat || crop || rotate || blur || sharpen || grayscale) {
+        console.log('Processing standard parameters:', { width, height, quality, outputFormat, crop, rotate, blur, sharpen, grayscale });
+        const actions = ['image'];
+        
+        if (width || height) {
+            let resizeParams = 'resize';
+            if (width) resizeParams += `,w_${width}`;
+            if (height) resizeParams += `,h_${height}`;
+            actions.push(resizeParams);
+        }
+        
+        if (quality) {
+            actions.push(`quality,q_${quality}`);
+        }
+        
+        if (outputFormat) {
+            actions.push(`format,${outputFormat}`);
+        }
+        
+        if (crop) {
+            const cropParams = crop.split(',');
+            if (cropParams.length >= 4) {
+                actions.push(`crop,w_${cropParams[0]},h_${cropParams[1]},x_${cropParams[2]},y_${cropParams[3]}`);
+            }
+        }
+        
+        if (rotate) {
+            actions.push(`rotate,${rotate}`);
+        }
+        
+        if (blur) {
+            actions.push(`blur,r_${blur}`);
+        }
+        
+        if (sharpen) {
+            actions.push(`sharpen,r_${sharpen}`);
+        }
+        
+        if (grayscale && grayscale.toLowerCase() === 'true') {
+            actions.push('grey');
+        }
+        
+        console.log('Standard parameters converted to actions:', actions);
+        return {
+            uri: uri,
+            actions: actions,
+        };
+    }
+    
+    // 如果有OSS格式参数
+    if (x_oss_process) {
+        console.log('Processing OSS format parameters:', x_oss_process);
+        const ossActions = x_oss_process.split('/').filter(x => x);
+        if (ossActions.length > 0 && ossActions[0] === 'image') {
+            return {
+                uri: uri,
+                actions: ossActions,
+            };
+        }
+        return {
+            uri: uri,
+            actions: ['image', ...ossActions],
+        };
+    }
+    
+    // 检查样式参数
+    if (parts.length === 1) {
+        return {
+            uri: uri,
+            actions: [],
+        };
+    }
+    
+    const stylename = ((_l = parts[1]) !== null && _l !== void 0 ? _l : '').trim();
+    if (!stylename) {
+        throw new processor_1.InvalidArgument('Empty style name');
+    }
+    return {
+        uri: parts[0],
+        actions: ['style', stylename],
+    };
+}
+exports.parseRequest = parseRequest;

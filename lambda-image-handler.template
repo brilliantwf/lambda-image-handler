@@ -1,0 +1,1407 @@
+{
+  "Description": "(SO0023) - Serverless Image Handler. version v6.5.0-api-adapter-0906",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Dist0"
+          },
+          "Parameters": [
+            "BucketParam0"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Dist1"
+          },
+          "Parameters": [
+            "BucketParam1"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Dist2"
+          },
+          "Parameters": [
+            "BucketParam2"
+          ]
+        }
+      ]
+    }
+  },
+  "Parameters": {
+    "BucketParam0": {
+      "Type": "String",
+      "Default": "",
+      "AllowedPattern": "^[^\\*]*$",
+      "Description": "(Required) The bucket that contains your image files."
+    },
+    "BucketParam1": {
+      "Type": "String",
+      "Default": "",
+      "AllowedPattern": "^[^\\*]*$",
+      "Description": "(Optional) The bucket that contains your image files."
+    },
+    "BucketParam2": {
+      "Type": "String",
+      "Default": "",
+      "AllowedPattern": "^[^\\*]*$",
+      "Description": "(Optional) The bucket that contains your image files."
+    },
+    "AutoWebpParam": {
+      "Type": "String",
+      "Default": "No",
+      "AllowedValues": [
+        "Yes",
+        "No"
+      ],
+      "Description": "Enable AutoWebp feature or not?"
+    }
+  },
+  "Conditions": {
+    "lambdaimagehandlerIsNotChinaRegionCondition5320E104": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "AWS::Partition"
+            },
+            "aws-cn"
+          ]
+        }
+      ]
+    },
+    "lambdaimagehandlerHasBucket099BE0900": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            "",
+            {
+              "Ref": "BucketParam0"
+            }
+          ]
+        }
+      ]
+    },
+    "lambdaimagehandlerHasBucket18EB3EAA8": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            "",
+            {
+              "Ref": "BucketParam1"
+            }
+          ]
+        }
+      ]
+    },
+    "lambdaimagehandlerHasBucket2A2162ABE": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            "",
+            {
+              "Ref": "BucketParam2"
+            }
+          ]
+        }
+      ]
+    },
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "lambdaimagehandlerForwardAllQueryStringC47FB5B9": {
+      "Type": "AWS::CloudFront::OriginRequestPolicy",
+      "Properties": {
+        "OriginRequestPolicyConfig": {
+          "CookiesConfig": {
+            "CookieBehavior": "none"
+          },
+          "HeadersConfig": {
+            "HeaderBehavior": "whitelist",
+            "Headers": [
+              "Origin",
+              "Accept"
+            ]
+          },
+          "Name": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::StackName"
+                },
+                "-",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "-FwdAllQS"
+              ]
+            ]
+          },
+          "QueryStringsConfig": {
+            "QueryStringBehavior": "all"
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ForwardAllQueryString/Resource"
+      },
+      "Condition": "lambdaimagehandlerIsNotChinaRegionCondition5320E104"
+    },
+    "lambdaimagehandlerCacheAllQueryStringC9005297": {
+      "Type": "AWS::CloudFront::CachePolicy",
+      "Properties": {
+        "CachePolicyConfig": {
+          "DefaultTTL": 86400,
+          "MaxTTL": 31536000,
+          "MinTTL": 0,
+          "Name": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::StackName"
+                },
+                "-",
+                {
+                  "Ref": "AWS::Region"
+                },
+                "-CacheAllQS"
+              ]
+            ]
+          },
+          "ParametersInCacheKeyAndForwardedToOrigin": {
+            "CookiesConfig": {
+              "CookieBehavior": "none"
+            },
+            "EnableAcceptEncodingBrotli": false,
+            "EnableAcceptEncodingGzip": false,
+            "HeadersConfig": {
+              "HeaderBehavior": "whitelist",
+              "Headers": [
+                "Origin",
+                "Accept"
+              ]
+            },
+            "QueryStringsConfig": {
+              "QueryStringBehavior": "all"
+            }
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/CacheAllQueryString/Resource"
+      },
+      "Condition": "lambdaimagehandlerIsNotChinaRegionCondition5320E104"
+    },
+    "lambdaimagehandlerStyleTable5E42A50E": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/StyleTable/Resource"
+      }
+    },
+    "lambdaimagehandlerDepsLayer2247FB11": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "aws-gcr-solutions-${AWS::Region}"
+          },
+          "S3Key": "sih-oss-api-adapter/v6.5.0-api-adapter-0906/7dd2a9d0b0b811bb87fc091c78efc0519390584c5f175adb718504dd46375f52.zip"
+        },
+        "CompatibleRuntimes": [
+          "nodejs20.x"
+        ],
+        "Description": "Sharp Deps Layer"
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/DepsLayer/Resource",
+        "aws:asset:path": "asset.7dd2a9d0b0b811bb87fc091c78efc0519390584c5f175adb718504dd46375f52",
+        "aws:asset:property": "Content"
+      }
+    },
+    "lambdaimagehandlerLambdaHandlerServiceRoleC23EE81D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/LambdaHandler/ServiceRole/Resource"
+      }
+    },
+    "lambdaimagehandlerLambdaHandlerServiceRoleDefaultPolicyD71E0943": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::If": [
+                    "lambdaimagehandlerHasBucket099BE0900",
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "BucketParam0"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                },
+                {
+                  "Fn::If": [
+                    "lambdaimagehandlerHasBucket18EB3EAA8",
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "BucketParam1"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                },
+                {
+                  "Fn::If": [
+                    "lambdaimagehandlerHasBucket2A2162ABE",
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "BucketParam2"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "lambdaimagehandlerStyleTable5E42A50E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "lambdaimagehandlerLambdaHandlerServiceRoleDefaultPolicyD71E0943",
+        "Roles": [
+          {
+            "Ref": "lambdaimagehandlerLambdaHandlerServiceRoleC23EE81D"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/LambdaHandler/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "lambdaimagehandlerLambdaHandlerC6609A90": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "aws-gcr-solutions-${AWS::Region}"
+          },
+          "S3Key": "sih-oss-api-adapter/v6.5.0-api-adapter-0906/ce77876ebf62f87ba1335d4e7d4245c7d54705f9197730c244d008d562275471.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "lambdaimagehandlerLambdaHandlerServiceRoleC23EE81D",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "REGION": {
+              "Ref": "AWS::Region"
+            },
+            "VIPS_DISC_THRESHOLD": "600m",
+            "NODE_ENV": "production",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "SRC_BUCKET": {
+              "Ref": "BucketParam0"
+            },
+            "STYLE_TABLE_NAME": {
+              "Ref": "lambdaimagehandlerStyleTable5E42A50E"
+            },
+            "AUTO_WEBP": {
+              "Ref": "AutoWebpParam"
+            }
+          }
+        },
+        "Handler": "src/index-lambda.handler",
+        "Layers": [
+          {
+            "Ref": "lambdaimagehandlerDepsLayer2247FB11"
+          }
+        ],
+        "MemorySize": 1024,
+        "Runtime": "nodejs20.x",
+        "Timeout": 30
+      },
+      "DependsOn": [
+        "lambdaimagehandlerLambdaHandlerServiceRoleDefaultPolicyD71E0943",
+        "lambdaimagehandlerLambdaHandlerServiceRoleC23EE81D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/LambdaHandler/Resource",
+        "aws:asset:path": "asset.ce77876ebf62f87ba1335d4e7d4245c7d54705f9197730c244d008d562275471",
+        "aws:asset:property": "Code"
+      }
+    },
+    "lambdaimagehandlerApiGw25C7C345A": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "ApiGw2",
+        "ProtocolType": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ApiGw2/Resource"
+      }
+    },
+    "lambdaimagehandlerApiGw2DefaultStage312574E6": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "lambdaimagehandlerApiGw25C7C345A"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ApiGw2/DefaultStage/Resource"
+      }
+    },
+    "lambdaimagehandlerApiGw2ANYproxylambdaimagehandlerApiGw2ANYproxy3756F2E3Permission4FE12D83": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaimagehandlerLambdaHandlerC6609A90",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "lambdaimagehandlerApiGw25C7C345A"
+              },
+              "/*/*/{proxy+}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ApiGw2/ANY--{proxy+}/lambdaimagehandlerApiGw2ANYproxy3756F2E3-Permission"
+      }
+    },
+    "lambdaimagehandlerApiGw2ANYproxyHttpIntegration381035564b68a4bff11ced4e25d946dd0F824AAC": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "lambdaimagehandlerApiGw25C7C345A"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "lambdaimagehandlerLambdaHandlerC6609A90",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0"
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ApiGw2/ANY--{proxy+}/HttpIntegration-381035564b68a4bff11ced4e25d946dd/Resource"
+      }
+    },
+    "lambdaimagehandlerApiGw2ANYproxy48C31A18": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "lambdaimagehandlerApiGw25C7C345A"
+        },
+        "RouteKey": "ANY /{proxy+}",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "lambdaimagehandlerApiGw2ANYproxyHttpIntegration381035564b68a4bff11ced4e25d946dd0F824AAC"
+              }
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/ApiGw2/ANY--{proxy+}/Resource"
+      }
+    },
+    "lambdaimagehandlerS3Origin0BE2F7209": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "Identity for s3://",
+                {
+                  "Ref": "BucketParam0"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/S3Origin0/Resource"
+      }
+    },
+    "lambdaimagehandlerDist0C66BD5F0": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "lambda-image-handler distribution0 for s3://",
+                {
+                  "Ref": "BucketParam0"
+                }
+              ]
+            ]
+          },
+          "CustomErrorResponses": [
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 500
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 501
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 502
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 503
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 504
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "CachePolicyId": {
+              "Ref": "lambdaimagehandlerCacheAllQueryStringC9005297"
+            },
+            "Compress": true,
+            "OriginRequestPolicyId": {
+              "Ref": "lambdaimagehandlerForwardAllQueryStringC47FB5B9"
+            },
+            "TargetOriginId": "lambdaimagehandlerDist0OriginGroup199994C1D",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "OriginGroups": {
+            "Items": [
+              {
+                "FailoverCriteria": {
+                  "StatusCodes": {
+                    "Items": [
+                      403
+                    ],
+                    "Quantity": 1
+                  }
+                },
+                "Id": "lambdaimagehandlerDist0OriginGroup199994C1D",
+                "Members": {
+                  "Items": [
+                    {
+                      "OriginId": "lambdaimagehandlerDist0Origin1FF314910"
+                    },
+                    {
+                      "OriginId": "lambdaimagehandlerDist0Origin2E020085F"
+                    }
+                  ],
+                  "Quantity": 2
+                }
+              }
+            ],
+            "Quantity": 1
+          },
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "lambdaimagehandlerApiGw25C7C345A"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist0Origin1FF314910",
+              "OriginCustomHeaders": [
+                {
+                  "HeaderName": "x-bucket",
+                  "HeaderValue": {
+                    "Ref": "BucketParam0"
+                  }
+                }
+              ]
+            },
+            {
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "BucketParam0"
+                    },
+                    ".s3.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist0Origin2E020085F",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "lambdaimagehandlerS3Origin0BE2F7209"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/Dist0/Resource"
+      },
+      "Condition": "lambdaimagehandlerHasBucket099BE0900"
+    },
+    "lambdaimagehandlerS3Origin105DD1717": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "Identity for s3://",
+                {
+                  "Ref": "BucketParam1"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/S3Origin1/Resource"
+      }
+    },
+    "lambdaimagehandlerDist1035A54F2": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "lambda-image-handler distribution1 for s3://",
+                {
+                  "Ref": "BucketParam1"
+                }
+              ]
+            ]
+          },
+          "CustomErrorResponses": [
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 500
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 501
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 502
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 503
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 504
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "CachePolicyId": {
+              "Ref": "lambdaimagehandlerCacheAllQueryStringC9005297"
+            },
+            "Compress": true,
+            "OriginRequestPolicyId": {
+              "Ref": "lambdaimagehandlerForwardAllQueryStringC47FB5B9"
+            },
+            "TargetOriginId": "lambdaimagehandlerDist1OriginGroup1D61D21FE",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "OriginGroups": {
+            "Items": [
+              {
+                "FailoverCriteria": {
+                  "StatusCodes": {
+                    "Items": [
+                      403
+                    ],
+                    "Quantity": 1
+                  }
+                },
+                "Id": "lambdaimagehandlerDist1OriginGroup1D61D21FE",
+                "Members": {
+                  "Items": [
+                    {
+                      "OriginId": "lambdaimagehandlerDist1Origin15C9B1C81"
+                    },
+                    {
+                      "OriginId": "lambdaimagehandlerDist1Origin262E1508C"
+                    }
+                  ],
+                  "Quantity": 2
+                }
+              }
+            ],
+            "Quantity": 1
+          },
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "lambdaimagehandlerApiGw25C7C345A"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist1Origin15C9B1C81",
+              "OriginCustomHeaders": [
+                {
+                  "HeaderName": "x-bucket",
+                  "HeaderValue": {
+                    "Ref": "BucketParam1"
+                  }
+                }
+              ]
+            },
+            {
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "BucketParam1"
+                    },
+                    ".s3.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist1Origin262E1508C",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "lambdaimagehandlerS3Origin105DD1717"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/Dist1/Resource"
+      },
+      "Condition": "lambdaimagehandlerHasBucket18EB3EAA8"
+    },
+    "lambdaimagehandlerS3Origin285EE8899": {
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "Identity for s3://",
+                {
+                  "Ref": "BucketParam2"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/S3Origin2/Resource"
+      }
+    },
+    "lambdaimagehandlerDist25DEAF5B5": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                "lambda-image-handler distribution2 for s3://",
+                {
+                  "Ref": "BucketParam2"
+                }
+              ]
+            ]
+          },
+          "CustomErrorResponses": [
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 500
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 501
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 502
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 503
+            },
+            {
+              "ErrorCachingMinTTL": 10,
+              "ErrorCode": 504
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "CachePolicyId": {
+              "Ref": "lambdaimagehandlerCacheAllQueryStringC9005297"
+            },
+            "Compress": true,
+            "OriginRequestPolicyId": {
+              "Ref": "lambdaimagehandlerForwardAllQueryStringC47FB5B9"
+            },
+            "TargetOriginId": "lambdaimagehandlerDist2OriginGroup11047FDF9",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "OriginGroups": {
+            "Items": [
+              {
+                "FailoverCriteria": {
+                  "StatusCodes": {
+                    "Items": [
+                      403
+                    ],
+                    "Quantity": 1
+                  }
+                },
+                "Id": "lambdaimagehandlerDist2OriginGroup11047FDF9",
+                "Members": {
+                  "Items": [
+                    {
+                      "OriginId": "lambdaimagehandlerDist2Origin1D1E4B593"
+                    },
+                    {
+                      "OriginId": "lambdaimagehandlerDist2Origin2DF8837BF"
+                    }
+                  ],
+                  "Quantity": 2
+                }
+              }
+            ],
+            "Quantity": 1
+          },
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "lambdaimagehandlerApiGw25C7C345A"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist2Origin1D1E4B593",
+              "OriginCustomHeaders": [
+                {
+                  "HeaderName": "x-bucket",
+                  "HeaderValue": {
+                    "Ref": "BucketParam2"
+                  }
+                }
+              ]
+            },
+            {
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "BucketParam2"
+                    },
+                    ".s3.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Id": "lambdaimagehandlerDist2Origin2DF8837BF",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "lambdaimagehandlerS3Origin285EE8899"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/lambda-image-handler/Dist2/Resource"
+      },
+      "Condition": "lambdaimagehandlerHasBucket2A2162ABE"
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/21S0W4CIRD8Ft8R67UfULUxNWmiuTZ952C9ondwZRfNhdy/F7gabePTzkyGHXZhzufFE3+YPIszTqU6zoK0Dnh4JyGPbLU3O+FECwSOraxBcl5SkiNRmrQ1rAS03klI6tZT54ktEIFih1qbOskXy8BSSpCN9WrvrCEetk5HVwnfHpB2ttGyz43uyUJ+wdVyS0f7QkpA3CgwpGn0pKR1SrrreNFxIF35PEe03/KBqd6I1qqKhw9RNXm+DAbWiLZSgoc30YP7BIe/5//wtTfy0vgW78C1GjFH4ONUpF0hzyuLnC+9PAItBQLTouWhtGN0rtfpRxQX2ulaEJxFfyp4eCXqFp1OhlQSTc+QG4wgSaX1NKKNIaiduFztH82+YRiYsQr4AWenecGLIv6YyQG1njof19gCL8f6A8+0Iq5LAgAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "lambda-image-handler/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Outputs": {
+    "StyleConfig": {
+      "Description": "The DynamoDB table of image processing style",
+      "Value": {
+        "Ref": "lambdaimagehandlerStyleTable5E42A50E"
+      }
+    },
+    "ApiGw2Endpoint": {
+      "Value": {
+        "Fn::GetAtt": [
+          "lambdaimagehandlerApiGw25C7C345A",
+          "ApiEndpoint"
+        ]
+      }
+    },
+    "Bucket0": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "s3://",
+            {
+              "Ref": "BucketParam0"
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket099BE0900"
+    },
+
+    "DistUrl0": {
+      "Description": "The CloudFront distribution url0",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "lambdaimagehandlerDist0C66BD5F0",
+                "DomainName"
+              ]
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket099BE0900"
+    },
+    "Bucket1": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "s3://",
+            {
+              "Ref": "BucketParam1"
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket18EB3EAA8"
+    },
+
+    "DistUrl1": {
+      "Description": "The CloudFront distribution url1",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "lambdaimagehandlerDist1035A54F2",
+                "DomainName"
+              ]
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket18EB3EAA8"
+    },
+    "Bucket2": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "s3://",
+            {
+              "Ref": "BucketParam2"
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket2A2162ABE"
+    },
+
+    "DistUrl2": {
+      "Description": "The CloudFront distribution url2",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "lambdaimagehandlerDist25DEAF5B5",
+                "DomainName"
+              ]
+            }
+          ]
+        ]
+      },
+      "Condition": "lambdaimagehandlerHasBucket2A2162ABE"
+    }
+  }
+}
